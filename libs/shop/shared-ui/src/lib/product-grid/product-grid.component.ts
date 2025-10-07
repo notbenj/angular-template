@@ -16,7 +16,7 @@ import { ProductCardComponent } from '../product-card/product-card.component';
       }
       @empty {
         <div class="no-products">
-          <p>No products found</p>
+          <p>Aucun produit trouvé</p>
         </div>
       }
     </div>
