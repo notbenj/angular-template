@@ -26,7 +26,7 @@ import { LoadingSpinnerComponent, ErrorMessageComponent } from '@org/shop/shared
         />
       } @else if (product()) {
         <div class="breadcrumb">
-          <a routerLink="/products">← Back to Products</a>
+          <a routerLink="/products">← Retour aux produits</a>
         </div>
 
         <div class="product-detail">

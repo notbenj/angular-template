@@ -7,7 +7,9 @@ test.describe('Product Detail Page', () => {
     await page.waitForLoadState('domcontentloaded');
   });
 
-  test('should navigate to product detail when clicking a product', async ({ page }) => {
+  test('should navigate to product detail when clicking a product', async ({
+    page,
+  }) => {
     // Click on the first product
     const firstProduct = page.locator('[class*="product-card"]').first();
     await firstProduct.click();
@@ -19,7 +21,7 @@ test.describe('Product Detail Page', () => {
     expect(page.url()).toMatch(/\/products\/prod-\d+/);
 
     // Verify back link is visible
-    const backLink = page.locator('a:has-text("Back to Products")');
+    const backLink = page.locator('a:has-text("Retour aux produits")');
     await expect(backLink).toBeVisible();
   });
 
@@ -38,7 +40,9 @@ test.describe('Product Detail Page', () => {
     await expect(productImage).toHaveAttribute('alt', /Product/);
 
     // Check category
-    const category = page.locator('text=/Home & Garden|Electronics|Clothing|Sports|Books/');
+    const category = page.locator(
+      'text=/Home & Garden|Electronics|Clothing|Sports|Books/'
+    );
     await expect(category.first()).toBeVisible();
 
     // Check rating
@@ -58,7 +62,9 @@ test.describe('Product Detail Page', () => {
     await expect(description).toBeVisible();
 
     // Check product information section
-    const productInfoHeading = page.locator('h3:has-text("Product Information")');
+    const productInfoHeading = page.locator(
+      'h3:has-text("Product Information")'
+    );
     await expect(productInfoHeading).toBeVisible();
 
     // Check product ID
@@ -75,7 +81,10 @@ test.describe('Product Detail Page', () => {
     await page.goto('/products');
 
     // Find an in-stock product (one without "Out of Stock" badge)
-    const inStockProduct = page.locator('[class*="product-card"]').filter({ hasNot: page.locator('text="Out of Stock"') }).first();
+    const inStockProduct = page
+      .locator('[class*="product-card"]')
+      .filter({ hasNot: page.locator('text="Out of Stock"') })
+      .first();
     await inStockProduct.click();
 
     // Wait for product detail page
@@ -87,27 +96,34 @@ test.describe('Product Detail Page', () => {
     await expect(addToCartButton).toBeEnabled();
 
     // Check for Add to Wishlist button
-    const addToWishlistButton = page.locator('button:has-text("Add to Wishlist")');
+    const addToWishlistButton = page.locator(
+      'button:has-text("Add to Wishlist")'
+    );
     await expect(addToWishlistButton).toBeVisible();
     await expect(addToWishlistButton).toBeEnabled();
 
     // Test clicking Add to Cart (should show alert)
-    page.on('dialog', dialog => {
+    page.on('dialog', (dialog) => {
       expect(dialog.message()).toContain('Product added to cart');
       dialog.accept();
     });
     await addToCartButton.click();
   });
 
-  test('should show disabled button for out-of-stock products', async ({ page }) => {
+  test('should show disabled button for out-of-stock products', async ({
+    page,
+  }) => {
     // Navigate to products page
     await page.goto('/products');
 
     // Find an out-of-stock product
-    const outOfStockProduct = page.locator('[class*="product-card"]').filter({ has: page.locator('text="Out of Stock"') }).first();
+    const outOfStockProduct = page
+      .locator('[class*="product-card"]')
+      .filter({ has: page.locator('text="Out of Stock"') })
+      .first();
 
     // Get the product before clicking to handle case where there might not be any
-    const hasOutOfStock = await outOfStockProduct.count() > 0;
+    const hasOutOfStock = (await outOfStockProduct.count()) > 0;
 
     if (!hasOutOfStock) {
       // Skip test if no out-of-stock products
@@ -120,11 +136,15 @@ test.describe('Product Detail Page', () => {
     await page.waitForURL('**/products/**');
 
     // Check for out of stock badge on detail page - use more specific selector to avoid strict mode violation
-    const outOfStockBadge = page.locator('.out-of-stock-badge').filter({ hasText: 'Out of Stock' });
+    const outOfStockBadge = page
+      .locator('.out-of-stock-badge')
+      .filter({ hasText: 'Out of Stock' });
     await expect(outOfStockBadge).toBeVisible();
 
     // Check for disabled button
-    const unavailableButton = page.locator('button:has-text("Currently Unavailable")');
+    const unavailableButton = page.locator(
+      'button:has-text("Currently Unavailable")'
+    );
     await expect(unavailableButton).toBeVisible();
     await expect(unavailableButton).toBeDisabled();
 
@@ -139,7 +159,7 @@ test.describe('Product Detail Page', () => {
     await page.waitForLoadState('domcontentloaded');
 
     // Click the back link
-    const backLink = page.locator('a:has-text("Back to Products")');
+    const backLink = page.locator('a:has-text("Retour aux produits")');
     await backLink.click();
 
     // Should navigate back to products page
@@ -147,7 +167,9 @@ test.describe('Product Detail Page', () => {
     expect(page.url()).toContain('/products');
 
     // Products grid should be visible
-    const productsGrid = page.locator('[class*="product-grid"], [class*="products"]');
+    const productsGrid = page.locator(
+      '[class*="product-grid"], [class*="products"]'
+    );
     await expect(productsGrid).toBeVisible();
   });
 });
